@@ -33,9 +33,9 @@ sys.stdout = sys.stdout.detach()
 変換時に `surrogateescape` を指定するためロケールの設定が不正な場合でも
 エラーにはならない。
 
-`surrogateescape`　では変換できない文字を \uDC80 から \uDCFF にマッピングする([PEP 383](https://peps.python.org/pep-0383/))。
+`surrogateescape` では変換できない文字を \uDC80 から \uDCFF にマッピングする([PEP 383](https://peps.python.org/pep-0383/))。
 これはサロゲートペアの下位領域で本来は \uD800 から \uDBFF の上位領域と合わせて使用する。
-`surrogateescape`　は上位がなく下位サロゲートのみ使用する。
+`surrogateescape` は上位がなく下位サロゲートのみ使用する。
 
 ## 変数 `_`
 

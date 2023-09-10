@@ -21,7 +21,7 @@ if val is None:
 エンコーディングを無効化する。
 
 ```python
-sys.stdin = sys.stdin.detash()
+sys.stdin = sys.stdin.detach()
 sys.stdout = sys.stdout.detach()
 ```
 

@@ -39,7 +39,7 @@ sys.stdout = sys.stdout.detach()
 
 ## 変数 `_`
 
-REPL で最後の評価結果が `_` に格納される。
+REPL で最後の評価結果が `_` に格納される([sys.displayhook](https://docs.python.org/ja/3/library/sys.html#sys.displayhook))。
 
 ```python
 > 1 + 1

@@ -66,7 +66,11 @@ False
 プリミティブな値、更新不可能なオブジェクトはハッシュ可能なオブジェクトになる。
 数字、文字列、更新不可能なオブジェクトで構成されたタプルなどが辞書のキーになる。
 
-## タプルの定義
+### 参照
+
+- [dict](https://docs.python.org/ja/3/library/stdtypes.html#mapping-types-dict)
+
+## タプル
 
 タプルを定義するときに `(`, `)` で囲まなくてもいい。
 
@@ -74,3 +78,7 @@ False
 > 1, 2, 3
 (1, 2, 3)
 ```
+
+### 参照
+
+- [tuple](https://docs.python.org/ja/3/library/stdtypes.html#tuples)

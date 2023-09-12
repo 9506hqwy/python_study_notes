@@ -9,11 +9,17 @@ except Exception1 as e
     pass
 except (Exception2, Exception3) as e
     pass
+except* Exception4 as e
+    pass
 else:
     pass
 finally:
     pass
 ```
+
+### 参照
+
+- [try 文](https://docs.python.org/ja/3/reference/compound_stmts.html#the-try-statement)
 
 ## ユーザ定義例外
 

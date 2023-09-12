@@ -47,14 +47,13 @@ C.method(self, ...)
 ```python
 > class A:
 .     a = 1
-.     def method():
+.     def method(self):
 .         return a
-.     b = method()
+> A().method()
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-  File "<stdin>", line 5, in A
   File "<stdin>", line 4, in method
-NameError: name 'a' is not defined
+NameError: name 'a' is not defined.
 ```
 
 ## `__slots__`
@@ -103,7 +102,7 @@ class A(metaclass=abc.ABCMeta):
 `@abstractmethod` や `@abstractclassmethod` などは引数は検証対象にならず同じ属性名であればいい。
 また、通常のメソッドと同様に実装を記述して `super` で呼び出すことができる。
 
-### 仮想サブクラス
+### 仮想的サブクラス
 
 抽象基底クラスを継承関係のないクラスでも `issubclass()` や `isinstance()` などで、
 継承しているとして扱うように設定することができる。
@@ -118,6 +117,10 @@ class A(metaclass=abc.ABCMeta):
 `__get__` に加えて `__set__` と `__delete__` を実装したディスクリプタをデータディスクリプタとなる。
 
 データディスクリプタの場合に名前解決はクラスの名前空間、インスタンスの名前空間の順に検索される。
+
+### 参照
+
+- [descriptor](https://docs.python.org/ja/3/glossary.html#term-descriptor)
 
 ## 特殊メソッド
 
@@ -146,24 +149,27 @@ call
 
 ## データクラス
 
-クラスに自動的に既定の実装を行う `@dataclass` を修飾する。
+クラスに自動的に既定の実装を行う `@dataclass` を修飾する([PEP 557](https://peps.python.org/pep-0557/))。
 
 ```python
 from dataclasses import dataclass
 
-@dataclass(eq=True, order=True, frozen=True)
+@dataclass(eq=True, order=True, frozen=True, slots=True)
 class A():
   value: int = 0
 ```
 
 `eq` で等価演算、
 `order` で比較演算、
-`frozen` で不変性を実装する。
+`frozen` でフィールドのイミュータブル、
+`slots` で `__slots__` を実装する。
 
 ## プロトコル
 
-オブジェクトのインターフェイスを定義する。
+オブジェクトのインターフェイスを定義する([PEP 544](https://peps.python.org/pep-0544/))。
 クラスと継承関係がなくても定義したインターフェイスを満たすかどうかをチェックできる。
+
+通常のクラスのように基本型として使用することもできる。
 
 ```python
 from typing import Protocol, runtime_checkable
@@ -183,7 +189,7 @@ class IA(Protocol):
 .     return 1
 .
 . isinstance(A(), IA)
-Truec
+True
 ```
 
 プロトコルを継承したクラスを継承した新たなプロトコルを作成する場合も

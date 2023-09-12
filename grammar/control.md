@@ -21,6 +21,8 @@ if MIN < value < MAX:
     pass
 ```
 
+Python3.8 以降で `CONDITION` に代入式が記述できるようになった([PEP 572](https://peps.python.org/pep-0572/))。
+
 パターンマッチは `match` 文で使用できる([PEP 636](https://peps.python.org/pep-0636/))。
 パターンは値のアンパックが使用できる。
 
@@ -35,6 +37,11 @@ match VALUE:
     case _:
         pass
 ```
+
+### 参照
+
+- [if 文](https://docs.python.org/ja/3/reference/compound_stmts.html#the-if-statement)
+- [match 文](https://docs.python.org/ja/3/reference/compound_stmts.html#the-match-statement)
 
 ## ループ
 
@@ -55,3 +62,8 @@ for val in collection:
 else:
     pass
 ```
+
+### 参照
+
+- [while 文](https://docs.python.org/ja/3/reference/compound_stmts.html#the-while-statement)
+- [for 文](https://docs.python.org/ja/3/reference/compound_stmts.html#the-for-statement)

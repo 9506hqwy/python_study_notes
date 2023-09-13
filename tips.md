@@ -64,6 +64,14 @@ Ellipsis
 
 [2.3. 識別子 (identifier) およびキーワード (keyword)](https://docs.python.org/ja/3/reference/lexical_analysis.html#identifiers)
 
+## リリースサイクル
+
+- [PEP 602 – Annual Release Cycle for Python](https://peps.python.org/pep-0602/)
+
+## 構文パーサ
+
+- [PEP 617 – New PEG parser for CPython](https://peps.python.org/pep-0617/)
+
 ## SCM 変遷
 
 - [PEP 347 – Migrating the Python CVS to Subversion](https://peps.python.org/pep-0347/)

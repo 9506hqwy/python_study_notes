@@ -88,6 +88,54 @@ Traceback (most recent call last):
 AttributeError: 'A' object has no attribute 'method'
 ```
 
+## `__init_subclass__`
+
+メタクラスとは別の方法でクラスをカスタマイズする([PEP 487](https://peps.python.org/pep-0487/))。
+型オブジェクトが作成されるときに実行される。
+
+```python
+> class Base:
+.     def __init_subclass__(cls, **kwargs):
+.         super().__init_subclass__(**kwargs)
+.         print(cls)
+.
+> class A(Base):
+.     pass
+.
+<class '__main__.A'>
+```
+
+## `__set_name__`
+
+クラスのプロパティを初期化するときに実行される([PEP 487](https://peps.python.org/pep-0487/))。
+プロパティにバリデータを実装するときに使用できる。
+
+```python
+> class Property:
+.     def __get__(self, instance, owner):
+.         print(instance)
+.         print(owner)
+.         return instance.__dict__[self.key]
+.
+.     def __set__(self, instance, value):
+.         instance.__dict__[self.key] = value
+.
+.     def __set_name__(self, owner, name):
+.         print(owner)
+.         self.key = name
+.
+> class A:
+.     prop = Property()
+.
+> a = A()
+<class '__main__.A'>
+> a.prop = 1
+> a.prop
+<__main__.A object at 0x000001C3CB523910>
+<class '__main__.A'>
+1
+```
+
 ## 抽象基底クラス
 
 `abc.ABCMeta` クラスをメタクラスとして定義したクラスを抽象基底クラスという。

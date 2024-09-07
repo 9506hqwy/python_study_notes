@@ -16,6 +16,7 @@ grammar/module
 grammar/package
 grammar/annotation
 package_management/index
+project_management/index
 tips
 ```
 

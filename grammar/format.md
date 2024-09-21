@@ -82,3 +82,20 @@
 ### 参照
 
 - [書式指定文字列の文法](https://docs.python.org/ja/3/library/string.html#formatstrings)
+
+## 文字列補間 (f-strings)
+
+リテラル中に式を指定する。
+
+```python
+f"{式[:<フォーマット文字列>]}"
+```
+
+Python 3.11 以前は式内で `\` を使用することはできない。
+そのため f-strings を `"` を囲むと式内で `"` をエスケープできず使用できない。`'` の場合も同じ。
+また、`#` も使用できないためコメントもできない。
+
+### 参照
+
+- [PEP 498 – Literal String Interpolation](https://peps.python.org/pep-0498/)
+- [PEP 701 – Syntactic formalization of f-strings](https://peps.python.org/pep-0701/)

@@ -15,6 +15,7 @@ grammar/class
 grammar/module
 grammar/package
 grammar/annotation
+grammar/encoding
 package_management/index
 project_management/index
 tips

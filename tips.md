@@ -25,18 +25,6 @@ sys.stdin = sys.stdin.detach()
 sys.stdout = sys.stdout.detach()
 ```
 
-## エンコーディング
-
-ファイルシステムからファイル名や環境変数名をバイト列で取得したときに、
-`sys.getfilesystemencoding()` でデコードして UNICODE に変換する。
-
-変換時に `surrogateescape` を指定するためロケールの設定が不正な場合でも
-エラーにはならない。
-
-`surrogateescape` では変換できない文字を \uDC80 から \uDCFF にマッピングする([PEP 383](https://peps.python.org/pep-0383/))。
-これはサロゲートペアの下位領域で本来は \uD800 から \uDBFF の上位領域と合わせて使用する。
-`surrogateescape` は上位がなく下位サロゲートのみ使用する。
-
 ## 変数 `_`
 
 REPL で最後の評価結果が `_` に格納される([sys.displayhook](https://docs.python.org/ja/3/library/sys.html#sys.displayhook))。
@@ -63,6 +51,12 @@ Ellipsis
 変数やメソッド名は UNICODE で定められる NFKC で正規化される。
 
 [2.3. 識別子 (identifier) およびキーワード (keyword)](https://docs.python.org/ja/3/reference/lexical_analysis.html#identifiers)
+
+## インタプリタと GIL
+
+- [PEP 684 – A Per-Interpreter GIL](https://peps.python.org/pep-0684/)
+- [PEP 703 – Making the Global Interpreter Lock Optional in CPython](https://peps.python.org/pep-0703/)
+- [PEP 734 – Multiple Interpreters in the Stdlib](https://peps.python.org/pep-0734/)
 
 ## リリースサイクル
 

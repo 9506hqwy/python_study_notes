@@ -20,7 +20,7 @@ __all__ = ['func', ...]
 
 - [\_\_import__](https://github.com/python/cpython/blob/v3.13.1/Python/bltinmodule.c#L272-L279)
   - [PyImport_ImportModuleLevelObject](https://github.com/python/cpython/blob/v3.13.1/Python/import.c#L3762)
-    - [import_get_module]([import_get_module](https://github.com/python/cpython/blob/v3.13.1/Python/import.c#L204))
+    - [import_get_module](https://github.com/python/cpython/blob/v3.13.1/Python/import.c#L204)
       - `sys.modules` からモジュールを取得する。
     - [import_find_and_load](https://github.com/python/cpython/blob/v3.13.1/Python/import.c#L3692)
       - [_find_and_load](https://github.com/python/cpython/blob/v3.13.1/Lib/importlib/_bootstrap.py#L1349)
@@ -62,6 +62,63 @@ __all__ = ['func', ...]
       - `__XXX__` 属性を設定する。
   - `sys.modules` に保存する。
   - [exec_module](https://github.com/python/cpython/blob/v3.13.1/Lib/importlib/_bootstrap_external.py#L1020)
+
+### プラグイン
+
+エントリポイントを使用してプラグインを実装する。
+
+下記の構成でパッケージを作成する。
+
+```text
++ pyproject.toml
++ sample
+  + __init__.py
+  + func.py
+```
+
+```ini
+# pyproject.toml
+[project]
+name = "sample"
+version = "0.1.0"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.entry-points.'sample.plugins']
+func = 'sample.func'
+```
+
+```Python
+# sample/func.py
+def add(a: int, b: int) -> int:
+    return a + b
+```
+
+下記をインストールすると *sample-0.1.0.dist-info* の下に *entry_points.txt* が配置される。
+
+```text
+[sample.plugins]
+func = sample.func
+```
+
+`importlib` を使用してエントリポイントのモジュールを検索してロードする。
+
+```python
+>>> import importlib.metadata
+>>> (mod,) = importlib.metadata.entry_points(name='func', group='sample.plugins')
+>>> func = mod.load()
+>>> func.add(1, 2)
+3
+```
+
+`load` を実行すると `sys.modules` に追加される。
+
+```python
+>>> sys.modules['sample.func'].add(1, 2)
+3
+```
 
 ## モジュール検索パス設定ファイル
 

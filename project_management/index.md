@@ -3,6 +3,7 @@
 ```{toctree}
 hatch
 pdm
+poetry
 rye
 uv
 ```

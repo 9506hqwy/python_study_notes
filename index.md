@@ -18,6 +18,7 @@ grammar/annotation
 grammar/encoding
 package_management/index
 project_management/index
+logging/index
 testing/index
 profile/index
 tips

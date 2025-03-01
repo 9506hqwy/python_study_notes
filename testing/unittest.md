@@ -67,6 +67,10 @@ FAILED (failures=1)
 
 テストの実行前後に処理を実施する。
 
+### 同期テスト
+
+`unittest.TestCase` を継承してクラスを実装する。
+
 ```python
 # main.py
 import unittest
@@ -169,6 +173,78 @@ AssertionError: 2 != 3
 
 ----------------------------------------------------------------------
 Ran 2 tests in 0.000s
+
+FAILED (failures=1)
+```
+
+### 非同期テスト
+
+`unittest.TestCase` の代わりに `unittest.IsolatedAsyncioTestCase` を使用する。
+
+```python
+# main.py
+import unittest
+
+
+class TestClass(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        print("setUp")
+
+    def tearDown(self):
+        print("tearDown")
+
+    async def asyncSetUp(self):
+        print("asyncSetUp")
+
+    async def asyncTearDown(self):
+        print("asyncTearDown")
+
+    async def test_success(self):
+        print("test_success")
+        self.assertEqual(3, 1 + 2)
+
+    async def test_failure(self):
+        print("test_failure")
+        self.assertEqual(2, 1 + 2)
+
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+実行する。
+各テストの前に `setUp()`, `asyncSetUp()` が実行され、後に `asyncTearDown()`, `tearDown()` が実行される。
+
+```sh
+> python main.py
+setUp
+asyncSetUp
+test_failure
+FasyncTearDown
+tearDown
+setUp
+asyncSetUp
+test_success
+asyncTearDown
+tearDown
+.
+======================================================================
+FAIL: test_failure (__main__.TestClass.test_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/local/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/root/workspace/main.py", line 24, in test_failure
+    self.assertEqual(2, 1 + 2)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+AssertionError: 2 != 3
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.004s
 
 FAILED (failures=1)
 ```
@@ -369,6 +445,33 @@ AssertionError: 2 != 3
 Ran 2 tests in 0.001s
 
 FAILED (failures=1)
+```
+
+非同期関数の場合は `AsyncMock` が返却される。
+非同期イテレータは `__aiter__` に戻り値を設定する。
+
+```python
+# main.py
+import unittest
+from unittest.mock import MagicMock
+
+
+class TestClass(unittest.IsolatedAsyncioTestCase):
+    async def test_success(self):
+        m = MagicMock()
+        m.__aiter__.return_value = [1, 2]
+
+        self.assertEqual([1, 2], [i async for i in m])
+
+    async def test_failure(self):
+        m = MagicMock()
+        m.__aiter__.return_value = [1, 2]
+
+        self.assertEqual([1], [i async for i in m])
+
+
+if __name__ == "__main__":
+    unittest.main()
 ```
 
 ## パッチ

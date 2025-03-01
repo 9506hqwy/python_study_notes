@@ -387,6 +387,85 @@ FAILED test_main.py::TestClass::test_failure - assert 2 == (1 + 2)
 ==================================================== 1 failed, 1 passed in 0.01s ====================================================
 ```
 
+### 非同期テスト
+
+pytest-asyncio をインストールする。
+
+```sh
+> pip install pytest-asyncio
+```
+
+`@pytest.mark.asyncio` デコレータを使用する。
+
+```python
+# test_main.py
+import pytest
+
+
+@pytest.fixture
+def upDown():
+    setUp()
+    yield
+    tearDown()
+
+
+def setUp():
+    print("setUp")
+
+
+def tearDown():
+    print("tearDown")
+
+
+@pytest.mark.asyncio
+@pytest.mark.usefixtures("upDown")
+async def test_success():
+    print("test_success")
+    assert 3 == 1 + 2
+
+
+@pytest.mark.asyncio
+@pytest.mark.usefixtures("upDown")
+async def test_failure():
+    print("test_failure")
+    assert 2 == 1 + 2
+```
+
+実行する。
+
+```sh
+> pytest -s
+======================================================================== test session starts ========================================================================
+platform linux -- Python 3.13.2, pytest-8.3.4, pluggy-1.5.0
+rootdir: /root/workspace
+plugins: asyncio-0.25.3
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None
+collected 2 items
+
+test_main.py setUp
+test_success
+.tearDown
+setUp
+test_failure
+FtearDown
+
+
+============================================================================= FAILURES ==============================================================================
+___________________________________________________________________________ test_failure ____________________________________________________________________________
+
+    @pytest.mark.asyncio
+    @pytest.mark.usefixtures("upDown")
+    async def test_failure():
+        print("test_failure")
+>       assert 2 == 1 + 2
+E       assert 2 == (1 + 2)
+
+test_main.py:31: AssertionError
+====================================================================== short test summary info ======================================================================
+FAILED test_main.py::test_failure - assert 2 == (1 + 2)
+==================================================================== 1 failed, 1 passed in 0.03s ====================================================================
+```
+
 ## テスト処理
 
 `assert` 文で検査する。

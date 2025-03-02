@@ -16,6 +16,7 @@ grammar/module
 grammar/package
 grammar/annotation
 grammar/encoding
+grammar/asyncio
 package_management/index
 project_management/index
 logging/index

@@ -23,7 +23,7 @@ uv run scalene --outfile profile.html --html --no-browser -m redfish_service
 
 アクセス後にサービスを停止する。
 
-```s
+```sh
 curl -u admin:admin -i http://127.0.0.1:8000/redfish/v1/SessionService/Sessions
 ```
 

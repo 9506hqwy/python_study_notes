@@ -27,7 +27,7 @@ pip 24.2 from /tmp/.venv/lib64/python3.9/site-packages/pip (python 3.9)
 
 editable mode は *setup.py* が必要になる。
 
-```
+```text
 ERROR: File "setup.py" or "setup.cfg" not found. Directory cannot be installed in editable mode: /tmp/sampleproject
 (A "pyproject.toml" file was found, but editable mode currently requires a setuptools-based build.)
 ```
@@ -123,7 +123,6 @@ Successfully installed build-1.2.2
 > pip download git+https://github.com/<owner>/<repository>
 > pip download <local file path>
 ```
-
 
 例: `build` を PyPI からダウンロードする。
 
@@ -314,7 +313,7 @@ Required-by:
 
 使用できない。
 
-```
+```text
 ERROR: XMLRPC request failed [code: -32500]
 RuntimeError: PyPI no longer supports 'pip search' (or XML-RPC search).
 Please use https://pypi.org/search (via a browser) instead.

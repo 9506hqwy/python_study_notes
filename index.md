@@ -1,4 +1,4 @@
-# Welcome to Python Study Notes's documentation!
+# Welcome to Python Study Notes's documentation
 
 ```{toctree}
 :maxdepth: 2

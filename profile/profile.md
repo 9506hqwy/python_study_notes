@@ -15,7 +15,7 @@ uv run python -m cProfile -o profile.pstat -m redfish_service
 
 アクセス後にサービスを停止する。
 
-```s
+```sh
 curl -u admin:admin -i http://127.0.0.1:8000/redfish/v1/SessionService/Sessions
 ```
 

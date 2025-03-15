@@ -308,7 +308,7 @@ tests/test_simple.py .                                                          
 
 環境の作成が下記のエラーが発生して失敗する。
 
-```
+```text
 ValueError: Metadata field `version` cannot be both statically defined and listed in field `project.dynamic`
 ```
 
@@ -318,7 +318,7 @@ ValueError: Metadata field `version` cannot be both statically defined and liste
 
 環境の作成が下記のエラーが発生して失敗する。
 
-```
+```text
 ValueError: Missing `tool.hatch.version` configuration
 ```
 
@@ -328,7 +328,7 @@ ValueError: Missing `tool.hatch.version` configuration
 
 環境の作成が下記のエラーが発生して失敗する。
 
-```
+```text
 The most likely cause of this is that there is no directory that matches the name of your project (sampleproject).
 ```
 

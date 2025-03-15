@@ -163,7 +163,6 @@ def is_str(v: object) -> TypeGuard[str]:
 
 型情報の配布方法は [PEP 561](https://peps.python.org/pep-0561/) で定義されている。
 
-
 パッケージに同封するインラインと、型情報のみ配布するスタブがある。
 
 ### インライン

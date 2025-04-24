@@ -98,3 +98,88 @@ uv run gprof2dot -f pstats profile.pstat | dot -T png -o profile.png
 結果は以下となる。
 
 ![yappi の可視化](../_static/image/yappi.png "yappi の可視化")
+
+## 非同期コードのプロファイル
+
+下記のコードで確認する。
+
+```python
+import asyncio
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+import yappi
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yappi.set_clock_type("cpu") # or "wall"
+    yappi.start(builtins=True)
+    yield
+    yappi.stop()
+    yappi.get_func_stats().save('profile.pstat', 'pstat')
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+@app.get("/")
+async def hello_world():
+    await asyncio.sleep(5)
+    return {"Hello": "World"}
+```
+
+サーバを起動する。
+
+```sh
+uvicorn --host 0.0.0.0 main:app
+```
+
+3回リクエストする。
+
+```sh
+ab -n 3 -c 3 http://127.0.0.1:8000/
+```
+
+クロックタイプが `cpu` の場合は `hello_world` メソッドではカウントされない。
+
+```python
+>>> import pstats
+>>> pstats.Stats('profile.pstat').strip_dirs().sort_stats('filename').print_stats('main.py')
+Thu Apr 24 13:25:33 2025    profile.pstat
+
+         3594 function calls (3631 primitive calls) in 0.033 seconds
+
+   Ordered by: file name
+   List reduced from 416 to 2 due to restriction <'main.py'>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        3    0.000    0.000    0.000    0.000 main.py:19(hello_world)
+      0/1    0.000             0.000    0.000 main.py:7(lifespan)
+
+
+<pstats.Stats object at 0x7f4183b8ddf0>
+```
+
+![yappi の可視化](../_static/image/yappi-async-cpu.png "yappi の可視化")
+
+クロックタイプが `wall` の場合は `hello_world` メソッドに `sleep` も含まれる。
+
+```python
+>>> import pstats
+>>> pstats.Stats('profile.pstat').strip_dirs().sort_stats('filename').print_stats('main.py')
+Thu Apr 24 13:31:54 2025    profile.pstat
+
+         3575 function calls (3612 primitive calls) in 53.960 seconds
+
+   Ordered by: file name
+   List reduced from 416 to 2 due to restriction <'main.py'>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        3    0.000    0.000   15.000    5.000 main.py:19(hello_world)
+      0/1    0.000             0.000    0.000 main.py:7(lifespan)
+
+
+<pstats.Stats object at 0x7f064ce71e20>
+```
+
+![yappi の可視化](../_static/image/yappi-async-wall.png "yappi の可視化")

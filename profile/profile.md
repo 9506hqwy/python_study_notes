@@ -64,6 +64,67 @@ uv run gprof2dot -f pstats profile.pstat | dot -T png -o profile.png
 
 ![cProfile の可視化](../_static/image/profile.png "cProfile の可視化")
 
+## 非同期コードのプロファイル
+
+下記のコードで確認する。
+
+```python
+import asyncio
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+async def hello_world():
+    await asyncio.sleep(5)
+    return {"Hello": "World"}
+```
+
+サーバを起動する。
+
+```sh
+python -m cProfile -o profile.pstat -m uvicorn --host 0.0.0.0 main:app
+```
+
+3回リクエストする。
+
+```sh
+ab -n 3 -c 3 http://127.0.0.1:8000/
+```
+
+`hello_world` メソッドではカウントされない。
+
+```sh
+>>> import pstats
+>>> pstats.Stats('profile.pstat').strip_dirs().sort_stats('filename').print_stats('main.py')
+Thu Apr 24 11:40:30 2025    profile.pstat
+
+         779648 function calls (750481 primitive calls) in 15.565 seconds
+
+   Ordered by: file name
+   List reduced from 3067 to 12 due to restriction <'main.py'>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   15.466   15.466 main.py:62(main)
+        1    0.000    0.000   15.466   15.466 main.py:464(run)
+        4    0.000    0.000    0.432    0.108 main.py:1(<module>)
+        2    0.000    0.000    0.027    0.014 main.py:1682(create_model)
+        3    0.000    0.000    0.024    0.008 main.py:592(model_rebuild)
+        1    0.000    0.000    0.000    0.000 main.py:121(BaseModel)
+       40    0.000    0.000    0.000    0.000 main.py:829(__pydantic_init_subclass__)
+        1    0.000    0.000    0.000    0.000 main.py:243(__init__)
+        6    0.000    0.000    0.000    0.000 main.py:7(hello_world)
+        1    0.000    0.000    0.000    0.000 main.py:18(Change)
+        1    0.000    0.000    0.000    0.000 main.py:591(__getattr__)
+        1    0.000    0.000    0.000    0.000 main.py:48(print_version)
+
+
+<pstats.Stats object at 0x7fb2ab92eb10>
+```
+
+![cProfile の可視化](../_static/image/profile-async.png "cProfile の可視化")
+
 ## 参考
 
 - [Python プロファイラ](https://docs.python.org/ja/3/library/profile.html)

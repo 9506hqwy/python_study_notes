@@ -51,7 +51,7 @@ async def hello_world():
 サーバを起動する。`-i` を指定する。
 
 ```sh
-py-spy record -i -o profile.svg -- uvicorn --host 0.0.0.0 main:app
+py-spy record -i -o profile.svg -- python -m uvicorn --host 0.0.0.0 main:app
 ```
 
 3回リクエストする。
